@@ -1,0 +1,56 @@
+<!-- <ngb-toast class="ngb-toasts bg-success text-light" [autohide]="false">
+  I am a simple static toast.
+</ngb-toast> -->
+<ngb-toast
+*ngFor="let toast of toastService.toasts"
+[class]="toast.classname"
+[autohide]="true"
+[delay]="toast.delay || 5000"
+(hidden)="toastService.remove(toast)"
+>
+<ng-template [ngIf]="isTemplate(toast)" [ngIfElse]="text">
+  <ng-template [ngTemplateOutlet]="toast.textOrTpl"></ng-template>
+</ng-template>
+
+<ng-template #text>{{ toast.textOrTpl }}</ng-template>
+</ngb-toast>
+
+
+
+<div class="col-md-4  col-xs-12">
+  <div class="col-md-12">
+    <h1>{{ title }}</h1>
+    <form [formGroup]="taskForm">
+      <div class="form-group">
+        <label>Description</label>
+        <input class="form-control" formControlName="description" type="text" />
+      </div>
+      <div class="form-group">
+        <div class="form-check">
+          <input
+            formControlName="isdone"
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+          />
+          <label class="form-check-label" for="flexCheckDefault">
+            is done ?
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group ">
+        <div class="row">
+          <div class="col-3">
+            <button class="btn btn-primary btn-block" (click)="onSubmit()">
+              {{ title }}
+            </button>
+          </div>
+        </div>
+      
+      </div>
+      <a [routerLink]="['/']">Back</a>
+    </form>
+  </div>
+</div>

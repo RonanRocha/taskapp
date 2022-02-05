@@ -1,0 +1,89 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Remove Task</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss({confirm: false, description: 'Cross click'})">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Do you really remove this task ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close({confirm: false, description: 'Cancel click'})">Cancel</button>
+    <button type="button" class="btn btn-outline-danger" (click)="modal.close({confirm: true, description: 'Remove click'})">Remove</button>
+  </div>
+</ng-template>
+  <div class="col-md-12">
+    <div class="col-md-12 mb-4">
+      <h1 class="mb-3">Tasks List</h1>
+    </div>
+    <div class="row">
+
+      <div class="col-md-12">   
+          <div class="row ">
+            <div class="col-md-2 col-xs-12 col-sm-3 col-lg-1 mb-xs-4">
+              <button class="btn btn-success btn-block w-30" [routerLink]="['/task/add']">
+                Add
+              </button>
+            </div>
+            <div class="col-md-10 col-lg-11 col-xs-12">
+                <app-task-search (searchEvent)="search($event)"></app-task-search>
+      
+            </div>
+          </div>      
+      </div>
+    </div>
+  </div>
+
+  <ngb-toast
+*ngFor="let toast of toastService.toasts"
+[class]="toast.classname"
+[autohide]="true"
+[delay]="toast.delay || 5000"
+(hidden)="toastService.remove(toast)"
+>
+<ng-template [ngIf]="isTemplate(toast)" [ngIfElse]="text">
+  <ng-template [ngTemplateOutlet]="toast.textOrTpl"></ng-template>
+</ng-template>
+
+<ng-template #text>{{ toast.textOrTpl }}</ng-template>
+</ngb-toast>
+
+
+  <div class="col-md-12">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">description</th>
+              <th scope="col">isdone</th>
+              <th scope="col">date</th>
+              <th scope="col">actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let task of taskList | filter: searchText:'description'">
+              <th scope="row">{{ task.id }}</th>
+              <td>
+                {{ task.description }}
+              </td>
+              <td>
+                <input type="checkbox" [checked]="task.isdone" disabled />
+              </td>
+              <td>{{ task.date | date: "dd/MM/yyyy HH:mm:ss" }}</td>
+              <td>
+                <div class="form-inline">
+                  <button class="btn btn-primary mr-2 " [routerLink]="['task/edit/', task.id]">Edit</button>
+                  <button class="btn btn-danger" (click)="onDelete(content, task.id)"> remove</button>
+                </div>
+             
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
